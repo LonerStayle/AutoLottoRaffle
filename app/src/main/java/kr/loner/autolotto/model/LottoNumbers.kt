@@ -40,4 +40,9 @@ data class LottoNumbers(
         return number01Valid && number02Valid && number03Valid && number04Valid && number05Valid && number06Valid && bonusNumberValid
     }
 
+    override fun toString(): String {
+        return "로또 당첨 번호 : ${number01},${number02},${number03},${number04},${number05},${number06},${bonusNumber}"
+    }
+
+
 }

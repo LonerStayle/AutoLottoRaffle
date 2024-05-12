@@ -23,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.Key.Companion.D
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
@@ -31,6 +32,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kr.loner.autolotto.model.LottoNumbers
 import kr.loner.autolotto.ui.theme.AutoLottoTheme
 
 @Composable
@@ -164,7 +166,7 @@ private fun InputLottoNumber(
         singleLine = true,
         textStyle = MaterialTheme.typography.bodyMedium.copy(
             textAlign = TextAlign.Center,
-            color = Color.White
+            color = Color.Black
         ),
         keyboardOptions = KeyboardOptions.Default.copy(
             keyboardType = KeyboardType.Number,
@@ -181,6 +183,8 @@ private fun InputLottoNumber(
             } else if (value.isEmpty()) {
                 onValueChange(null)
             }
+
+
 
         }
 
