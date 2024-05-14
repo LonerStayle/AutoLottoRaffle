@@ -1,4 +1,4 @@
-package kr.loner.autolotto
+package kr.loner.autolotto.ui
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -23,7 +23,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key.Companion.D
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
@@ -32,7 +31,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import kr.loner.autolotto.model.LottoNumbers
+import kr.loner.autolotto.R
 import kr.loner.autolotto.ui.theme.AutoLottoTheme
 
 @Composable

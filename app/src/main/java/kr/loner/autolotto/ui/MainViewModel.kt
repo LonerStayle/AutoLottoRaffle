@@ -1,8 +1,9 @@
-package kr.loner.autolotto
+package kr.loner.autolotto.ui
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,10 +12,16 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kr.loner.autolotto.domain.CheckWinningNumberUseCase
+import kr.loner.autolotto.domain.CreateWinningNumberUseCase
 import kr.loner.autolotto.model.LottoNumbers
-import java.security.SecureRandom
+import javax.inject.Inject
 
-class MainViewModel : ViewModel() {
+@HiltViewModel
+class MainViewModel @Inject constructor(
+    private val createWinningNumberUseCase: CreateWinningNumberUseCase,
+    private val checkWinningNumberUseCase: CheckWinningNumberUseCase
+) : ViewModel() {
 
     private val _mainUiState = MutableStateFlow(MainUiState())
     val mainUiState: StateFlow<MainUiState> = _mainUiState
@@ -73,10 +80,9 @@ class MainViewModel : ViewModel() {
     }
 
     private var raffleJob: Job? = null
-    val random = SecureRandom()
     fun startRaffle() {
 
-        if(raffleJob?.isActive == true) return
+        if (raffleJob?.isActive == true) return
 
         val lottoNumbers = mainUiState.value.lottoNumbers
         if (!lottoNumbers.isValidNumbers()) {
@@ -86,43 +92,40 @@ class MainViewModel : ViewModel() {
 
         if (lottoNumbers.isAllNumberNotNull) {
             raffleJob = viewModelScope.launch(Dispatchers.Default) {
-                    setWinningDay(null)
-                    var addWinningDay = 0L
-                    while (isActive) {
+                setWinningDay(null)
+                var addWinningDay = 0L
+                while (isActive) {
 
 
+                    val winningNumbers = createWinningNumberUseCase()
 
-                        val winningNumbers = generateWinningNumbers()
-
-                        if (checkNumberEach(
-                                winningNumbers = winningNumbers,
-                                checkNumbers = lottoNumbers
-                            )
-                        ) {
-                            Log.d("checkk","당첨!!!")
-                            withContext(Dispatchers.Main){
-                                setWinningDay(addWinningDay)
-                                resetLottoNumber()
-                            }
-                            break
-                        } else {
-                            addWinningDay += 7
+                    if (checkNumberEach(
+                            winningNumbers = winningNumbers,
+                            checkNumbers = lottoNumbers
+                        )
+                    ) {
+                        Log.d("checkk", "당첨!!!")
+                        withContext(Dispatchers.Main) {
+                            setWinningDay(addWinningDay)
+                            resetLottoNumber()
                         }
+                        break
+                    } else {
+                        addWinningDay += 7
                     }
-
+                }
             }
-
         } else {
             mainEffect(MainEffect.ShowToast("로또 번호를 모두 선택해주세요"))
         }
     }
 
-    private fun mainEffect(effect: MainEffect){
+    private fun mainEffect(effect: MainEffect) {
         _mainEffect.value = effect
     }
 
     private fun checkNumberEach(winningNumbers: LottoNumbers, checkNumbers: LottoNumbers): Boolean {
-        Log.d("checkk", winningNumbers.toString())
+
         val winnings = listOf(
             winningNumbers.number01,
             winningNumbers.number02,
@@ -152,15 +155,6 @@ class MainViewModel : ViewModel() {
         return results.all { it }
     }
 
-    private fun generateWinningNumbers() = LottoNumbers(
-            number01 = (random.nextInt(45) + 1).toShort(),
-            number02 = (random.nextInt(45) + 1).toShort(),
-            number03 = (random.nextInt(45) + 1).toShort(),
-            number04 = (random.nextInt(45) + 1).toShort(),
-            number05 = (random.nextInt(45) + 1).toShort(),
-            number06 = (random.nextInt(45) + 1).toShort(),
-            bonusNumber = (random.nextInt(45) + 1).toShort(),
-        )
 
 
 

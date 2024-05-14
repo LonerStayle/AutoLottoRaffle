@@ -1,4 +1,4 @@
-package kr.loner.autolotto
+package kr.loner.autolotto.ui
 
 sealed interface MainEffect {
     data object Ide : MainEffect

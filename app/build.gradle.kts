@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.kotlinKapt)
+
 }
 
 android {
@@ -49,6 +51,11 @@ android {
     }
 }
 
+kapt{
+    correctErrorTypes = true
+}
+
+
 dependencies {
 
     implementation(libs.androidx.core.ktx)
@@ -62,6 +69,12 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewModel)
     implementation(libs.androidx.lifecycle.runtime.compose)
 
+    implementation(libs.org.jsoup)
+
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.complier)
+
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -69,4 +82,5 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
 }

@@ -1,4 +1,4 @@
-package kr.loner.autolotto
+package kr.loner.autolotto.ui
 
 import kr.loner.autolotto.model.LottoNumbers
 
